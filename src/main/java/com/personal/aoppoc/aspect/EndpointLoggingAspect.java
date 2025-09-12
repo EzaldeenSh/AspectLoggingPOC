@@ -21,6 +21,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -50,7 +52,7 @@ public class EndpointLoggingAspect {
 
             final Map<String, Object> logData = new LinkedHashMap<>();
             logData.put("method", request.getMethod());
-            logData.put("uri", request.getRequestURI());
+            logData.put("uri", URLDecoder.decode(request.getRequestURI(), StandardCharsets.UTF_8));
             logData.put("endpoint", joinPoint.getSignature().getName());
 
 
