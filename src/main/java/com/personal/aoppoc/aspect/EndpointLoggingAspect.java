@@ -43,7 +43,7 @@ public class EndpointLoggingAspect {
     public void logEndpointInputs(final JoinPoint joinPoint, final LogEndpoint logEndpoint) {
         try {
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-            if (attributes == null) {
+            if (Objects.isNull(attributes)) {
                 log.warn("Could not get request attributes for logging");
                 return;
             }
