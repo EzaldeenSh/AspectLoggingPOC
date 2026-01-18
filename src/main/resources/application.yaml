@@ -1,0 +1,12 @@
+spring:
+  application:
+  name: AOPPOC
+
+endpoint:
+  logging:
+#    enabled: ${enable-logging}
+
+logging:
+  path-to-controller: ${controller-path}
+#  endpoint.logging.enabled= false
+#  logging.path-to-controller=${controller-path}

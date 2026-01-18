@@ -13,6 +13,7 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,10 +31,12 @@ import java.util.stream.Collectors;
 @Component
 @Slf4j
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+@ConditionalOnProperty(name = "endpoint.logging.enabled", havingValue = "true")
 public class EndpointLoggingAspect {
     ObjectMapper objectMapper;
 
     public EndpointLoggingAspect() {
+        log.info("Component created");
         this.objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
