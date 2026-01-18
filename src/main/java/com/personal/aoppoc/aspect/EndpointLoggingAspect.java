@@ -13,6 +13,7 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -28,10 +31,12 @@ import java.util.stream.Collectors;
 @Component
 @Slf4j
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+@ConditionalOnProperty(name = "endpoint.logging.enabled", havingValue = "true")
 public class EndpointLoggingAspect {
     ObjectMapper objectMapper;
 
     public EndpointLoggingAspect() {
+        log.info("Component created");
         this.objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
@@ -41,7 +46,7 @@ public class EndpointLoggingAspect {
     public void logEndpointInputs(final JoinPoint joinPoint, final LogEndpoint logEndpoint) {
         try {
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-            if (attributes == null) {
+            if (Objects.isNull(attributes)) {
                 log.warn("Could not get request attributes for logging");
                 return;
             }
@@ -50,7 +55,7 @@ public class EndpointLoggingAspect {
 
             final Map<String, Object> logData = new LinkedHashMap<>();
             logData.put("method", request.getMethod());
-            logData.put("uri", request.getRequestURI());
+            logData.put("uri", URLDecoder.decode(request.getRequestURI(), StandardCharsets.UTF_8));
             logData.put("endpoint", joinPoint.getSignature().getName());
 
 

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 public class TestController {
 
     @PostMapping("/v1/log-test/{id}")
-    @LogEndpoint(excludeHeaders = {"x-client-id"})
+    @LogEndpoint(excludeHeaders = {"x-client-id", "accept", "host"}, excludePathVariables = {"id"})
     public ResponseEntity<?> testLog(@RequestBody Object request, @RequestHeader HttpHeaders headers, @RequestParam String param1, @PathVariable String id) {
 
             return ResponseEntity.ok(HttpStatus.NOT_IMPLEMENTED);
