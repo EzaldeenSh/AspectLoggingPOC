@@ -13,7 +13,6 @@ public class AppConfig {
 
     @Bean
     public ObjectMapper loggingObjectMapper() {
-        log.info("LoggingObjectMapper");
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
